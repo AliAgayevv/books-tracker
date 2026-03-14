@@ -1,0 +1,16 @@
+{
+  "name": "books-tracker",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write \"**/*.{ts,json}\"",
+  "format:check": "prettier --check \"**/*.{ts,json}\""
+  },
+  "workspaces": [
+    "packages/*",
+    "server",
+    "client"
+  ],
+  "devDependencies": {
+    "prettier": "^3.8.1"
+  }
+}
