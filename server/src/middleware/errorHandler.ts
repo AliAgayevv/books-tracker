@@ -1,13 +1,13 @@
 import type { NextFunction, Request, Response } from "express";
 import ResponseHandler from "../utils/responseHandler";
-import { HttpStatus } from "../../../packages/shared/src/constants/httpStatus";
+import { HttpStatus, HttpStatusCode } from "../../../packages/shared/src/constants/httpStatus";
 import { logger } from "../config/logger";
 import { ErrorCode } from "@books-tracker/shared";
 
 export class AppError extends Error {
   constructor(
     public message: string,
-    public statusCode = HttpStatus.INTERNAL_SERVER_ERROR,
+    public statusCode: HttpStatusCode = HttpStatus.INTERNAL_SERVER_ERROR,
     public errorCode: ErrorCode = ErrorCode.INTERNAL_ERROR,
   ) {
     super(message);
@@ -15,12 +15,7 @@ export class AppError extends Error {
   }
 }
 
-export function errorHandler(
-  err: Error,
-  _req: Request,
-  res: Response,
-  _next: NextFunction,
-) {
+export function errorHandler(err: Error, _req: Request, res: Response, _next: NextFunction) {
   if (err instanceof AppError) {
     logger.warn({
       errorCode: err.errorCode,

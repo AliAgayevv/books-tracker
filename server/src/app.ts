@@ -12,6 +12,8 @@ import { rateLimitConfigs } from "./config/rateLimiter";
 import { errorHandler } from "./middleware/errorHandler";
 import { pool } from "./config/db";
 
+import bookRouter from "./modules/books/book.router";
+
 const globalRateLimit = rateLimitMiddleware(rateLimitConfigs.global);
 const authRateLimit = rateLimitMiddleware(rateLimitConfigs.auth);
 const isProduction = envConfig.NODE_ENV === "production";
@@ -78,6 +80,7 @@ class App {
 
     // Protected routes
     // this.app.use("/api/books", requireAuth, bookRoutes);
+    this.app.use("/api/books", bookRouter);
   }
 
   private initializeErrorHandling(): void {
