@@ -6,3 +6,4 @@
 /package-lock.json
 /server/logs
 /server/logs/*
+/*/.env
