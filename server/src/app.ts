@@ -1,4 +1,3 @@
-// src/app.ts
 import express from "express";
 import helmet from "helmet";
 import cors from "cors";
@@ -13,6 +12,7 @@ import { errorHandler } from "./middleware/errorHandler";
 import { pool } from "./config/db";
 
 import bookRouter from "./modules/books/book.router";
+import authRouter from "./modules/auth/auth.router";
 
 const globalRateLimit = rateLimitMiddleware(rateLimitConfigs.global);
 const authRateLimit = rateLimitMiddleware(rateLimitConfigs.auth);
@@ -76,10 +76,9 @@ class App {
     });
 
     // Auth routes
-    // this.app.use("/api/auth", authRateLimit, authRoutes);
+    this.app.use("/api/auth", authRateLimit, authRouter);
 
     // Protected routes
-    // this.app.use("/api/books", requireAuth, bookRoutes);
     this.app.use("/api/books", bookRouter);
   }
 
