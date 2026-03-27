@@ -12,6 +12,11 @@ interface EnvConfig {
   DB_NAME: string;
   DB_USER: string;
   DB_PASSWORD: string;
+  SESSION_SECRET: string;
+  GOOGLE_CLIENT_ID: string;
+  GOOGLE_CLIENT_SECRET: string;
+  GOOGLE_CALLBACK_URL: string;
+  APP_NAME_FOR_2FA: string;
 }
 
 export const envConfig: EnvConfig = {
@@ -24,4 +29,9 @@ export const envConfig: EnvConfig = {
   DB_NAME: process.env.DB_NAME || "books_tracker",
   DB_USER: process.env.DB_USER || "postgres",
   DB_PASSWORD: process.env.DB_PASSWORD || "password",
+  SESSION_SECRET: process.env.SESSION_SECRET || "your-session-secret",
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || "",
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || "",
+  GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL || "",
+  APP_NAME_FOR_2FA: process.env.APP_NAME_FOR_2FA || "Books Tracker",
 };

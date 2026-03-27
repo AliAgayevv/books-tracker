@@ -10,6 +10,8 @@ import { rateLimitMiddleware } from "./middleware/rateLimiterMiddleware";
 import { rateLimitConfigs } from "./config/rateLimiter";
 import { errorHandler } from "./middleware/errorHandler";
 import { pool } from "./config/db";
+import { sessionMiddleware } from "./config/session";
+import { initializePassport } from "./config/passport";
 
 import bookRouter from "./modules/books/book.router";
 import authRouter from "./modules/auth/auth.router";
@@ -51,6 +53,12 @@ class App {
     this.app.use(cors(corsOptions));
     this.app.use(express.json({ limit: "10mb" }));
     this.app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+    this.app.use(sessionMiddleware);
+
+    const passportMiddleware = initializePassport();
+    this.app.use(passportMiddleware.initialize);
+    this.app.use(passportMiddleware.session);
 
     this.app.use(globalRateLimit);
   }

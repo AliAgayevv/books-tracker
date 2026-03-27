@@ -10,3 +10,10 @@ export const loginSchema = z.object({
   email: z.email(),
   password: z.string().min(1),
 });
+
+export const verifyTotpSchema = z.object({
+  token: z
+    .string()
+    .length(6, "TOTP token must be exactly 6 digits")
+    .regex(/^\d+$/, "TOTP token must contain only digits"),
+});
