@@ -5,6 +5,7 @@ import { AppError } from "../../middleware/errorHandler";
 import { HttpStatus, ErrorCode } from "@books-tracker/shared";
 import type { CreateUserDto, LoginDto } from "./auth.types";
 import { logger } from "../../config/logger";
+import { envConfig } from "../../config/env";
 
 export const authController = {
   async register(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -119,7 +120,8 @@ export const authController = {
       req.session.userId = user.id;
       req.session.authenticated = true;
 
-      res.redirect("/");
+      // redirect root client url
+      res.redirect(envConfig.CLIENT_URL);
     } catch (err) {
       next(err);
     }

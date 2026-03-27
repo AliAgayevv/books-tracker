@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Auth Test</title>
+    <style>
+      * { box-sizing: border-box; font-family: monospace; }
+      body { max-width: 900px; margin: 40px auto; padding: 0 20px; background: #0f0f0f; color: #e0e0e0; }
+      h1 { color: #fff; }
+      h2 { color: #aaa; border-bottom: 1px solid #333; padding-bottom: 6px; margin-top: 32px; }
+      .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+      .card { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px; padding: 16px; }
+      .card h3 { margin: 0 0 12px; color: #ccc; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+      input { width: 100%; padding: 8px; margin-bottom: 8px; background: #0f0f0f; border: 1px solid #333; color: #e0e0e0; border-radius: 4px; font-size: 13px; }
+      button { width: 100%; padding: 9px; background: #2563eb; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-family: monospace; }
+      button:hover { background: #1d4ed8; }
+      button.danger { background: #dc2626; }
+      button.danger:hover { background: #b91c1c; }
+      button.secondary { background: #374151; }
+      button.secondary:hover { background: #4b5563; }
+      #log { background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 8px; padding: 16px; margin-top: 24px; min-height: 200px; max-height: 400px; overflow-y: auto; }
+      #log h2 { border: none; margin-top: 0; }
+      .log-entry { margin-bottom: 10px; font-size: 12px; border-left: 3px solid #333; padding-left: 10px; }
+      .log-entry.ok { border-color: #22c55e; }
+      .log-entry.err { border-color: #ef4444; }
+      .log-entry .ts { color: #555; }
+      .log-entry .label { color: #94a3b8; font-weight: bold; }
+      pre { white-space: pre-wrap; word-break: break-all; margin: 4px 0 0; color: #cbd5e1; }
+      #qr-container { text-align: center; margin-top: 8px; }
+      #qr-container img { max-width: 180px; border: 4px solid #fff; border-radius: 4px; }
+      #secret-display { background: #0f0f0f; padding: 8px; border-radius: 4px; word-break: break-all; font-size: 12px; color: #fbbf24; margin-top: 6px; }
+    </style>
+  </head>
+  <body>
+    <h1>Auth Test Panel</h1>
+    <p style="color:#666; font-size:13px;">All requests go to <code style="color:#94a3b8">http://localhost:3000</code> with credentials (cookies) included.</p>
+
+    <h2>Register / Login</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Register</h3>
+        <input id="reg-username" placeholder="username" value="testuser" />
+        <input id="reg-email" placeholder="email" value="test@example.com" />
+        <input id="reg-password" placeholder="password" value="password123" />
+        <button onclick="register()">POST /api/auth/register</button>
+      </div>
+      <div class="card">
+        <h3>Login</h3>
+        <input id="login-email" placeholder="email" value="test@example.com" />
+        <input id="login-password" placeholder="password" value="password123" />
+        <button onclick="login()">POST /api/auth/login</button>
+      </div>
+    </div>
+
+    <h2>Session</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Current User</h3>
+        <p style="color:#666; font-size:12px; margin:0 0 10px">Requires authenticated session.</p>
+        <button class="secondary" onclick="getMe()">GET /api/auth/me</button>
+      </div>
+      <div class="card">
+        <h3>Logout</h3>
+        <p style="color:#666; font-size:12px; margin:0 0 10px">Destroys the session and clears the cookie.</p>
+        <button class="danger" onclick="logout()">POST /api/auth/logout</button>
+      </div>
+    </div>
+
+    <h2>2FA Setup (run in order)</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>1. Setup — Generate Secret + QR</h3>
+        <p style="color:#666; font-size:12px; margin:0 0 10px">Must be logged in. Generates a TOTP secret and returns QR code.</p>
+        <button class="secondary" onclick="setup2fa()">POST /api/auth/2fa/setup</button>
+        <div id="qr-container"></div>
+        <div id="secret-display"></div>
+      </div>
+      <div class="card">
+        <h3>2. Enable — Verify First Code</h3>
+        <p style="color:#666; font-size:12px; margin:0 0 10px">Enter the 6-digit code from your authenticator app to confirm setup.</p>
+        <input id="enable-token" placeholder="6-digit code" maxlength="6" />
+        <button onclick="enable2fa()">POST /api/auth/2fa/enable</button>
+      </div>
+      <div class="card">
+        <h3>Verify (Login Flow)</h3>
+        <p style="color:#666; font-size:12px; margin:0 0 10px">Used after login returns <code>twoFactorRequired: true</code>.</p>
+        <input id="verify-token" placeholder="6-digit code" maxlength="6" />
+        <button onclick="verify2fa()">POST /api/auth/2fa/verify</button>
+      </div>
+      <div class="card">
+        <h3>Disable</h3>
+        <p style="color:#666; font-size:12px; margin:0 0 10px">Requires a valid code to confirm intent.</p>
+        <input id="disable-token" placeholder="6-digit code" maxlength="6" />
+        <button class="danger" onclick="disable2fa()">POST /api/auth/2fa/disable</button>
+      </div>
+    </div>
+
+    <h2>OAuth</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Google OAuth</h3>
+        <p style="color:#666; font-size:12px; margin:0 0 10px">Opens Google consent screen in a new tab. On success, redirects to <code>/</code>.</p>
+        <button class="secondary" onclick="window.open('http://localhost:3000/api/auth/google', '_blank')">
+          GET /api/auth/google ↗
+        </button>
+      </div>
+    </div>
+
+    <div id="log">
+      <h2>Response Log</h2>
+    </div>
+
+    <script>
+      const BASE = "http://localhost:3000";
+
+      async function call(label, method, path, body) {
+        try {
+          const opts = {
+            method,
+            // credentials: "include" sends the session cookie with every request.
+            // Without this, the browser treats the fetch as a cross-origin request
+            // and strips the cookie — your session would never be recognized.
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+          };
+          if (body) opts.body = JSON.stringify(body);
+
+          const res = await fetch(BASE + path, opts);
+          const data = await res.json();
+          log(label, res.ok, res.status, data);
+          return data;
+        } catch (err) {
+          log(label, false, "network", { error: err.message });
+        }
+      }
+
+      function log(label, ok, status, data) {
+        const container = document.getElementById("log");
+        const entry = document.createElement("div");
+        entry.className = "log-entry " + (ok ? "ok" : "err");
+        const ts = new Date().toLocaleTimeString();
+        entry.innerHTML = `
+          <span class="ts">${ts}</span>
+          <span class="label"> ${label}</span>
+          <span style="color:${ok ? "#22c55e" : "#ef4444"}"> ${status}</span>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+        // Insert newest at top
+        const heading = container.querySelector("h2");
+        container.insertBefore(entry, heading.nextSibling);
+      }
+
+      function register() {
+        call("POST /register", "POST", "/api/auth/register", {
+          username: document.getElementById("reg-username").value,
+          email: document.getElementById("reg-email").value,
+          password: document.getElementById("reg-password").value,
+        });
+      }
+
+      function login() {
+        call("POST /login", "POST", "/api/auth/login", {
+          email: document.getElementById("login-email").value,
+          password: document.getElementById("login-password").value,
+        });
+      }
+
+      function getMe() {
+        call("GET /me", "GET", "/api/auth/me");
+      }
+
+      function logout() {
+        call("POST /logout", "POST", "/api/auth/logout");
+      }
+
+      async function setup2fa() {
+        const data = await call("POST /2fa/setup", "POST", "/api/auth/2fa/setup");
+        if (data?.data?.qrCodeDataUrl) {
+          document.getElementById("qr-container").innerHTML =
+            `<img src="${data.data.qrCodeDataUrl}" alt="QR Code" />`;
+          document.getElementById("secret-display").textContent =
+            "Manual entry secret: " + data.data.secret;
+        }
+      }
+
+      function enable2fa() {
+        call("POST /2fa/enable", "POST", "/api/auth/2fa/enable", {
+          token: document.getElementById("enable-token").value,
+        });
+      }
+
+      function verify2fa() {
+        call("POST /2fa/verify", "POST", "/api/auth/2fa/verify", {
+          token: document.getElementById("verify-token").value,
+        });
+      }
+
+      function disable2fa() {
+        call("POST /2fa/disable", "POST", "/api/auth/2fa/disable", {
+          token: document.getElementById("disable-token").value,
+        });
+      }
+    </script>
+  </body>
+</html>

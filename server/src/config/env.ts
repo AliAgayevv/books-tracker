@@ -17,6 +17,7 @@ interface EnvConfig {
   GOOGLE_CLIENT_SECRET: string;
   GOOGLE_CALLBACK_URL: string;
   APP_NAME_FOR_2FA: string;
+  CLIENT_URL: string;
 }
 
 export const envConfig: EnvConfig = {
@@ -34,4 +35,5 @@ export const envConfig: EnvConfig = {
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || "",
   GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL || "",
   APP_NAME_FOR_2FA: process.env.APP_NAME_FOR_2FA || "Books Tracker",
+  CLIENT_URL: process.env.CLIENT_URL || "http://localhost:3000",
 };

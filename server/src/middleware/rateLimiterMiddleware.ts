@@ -4,6 +4,7 @@ import { HttpStatus } from "@books-tracker/shared";
 import { logger } from "../config/logger";
 import { rateLimitConfigs } from "../config/rateLimiter";
 import { RateLimitOptions, RequestCounter } from "../types/rateLimiter";
+import { envConfig } from "../config/env";
 
 const FIVE_MINUTES_MS = 5 * 60 * 1000;
 const CLEANUP_INTERVAL_MS = FIVE_MINUTES_MS;
@@ -31,6 +32,7 @@ export const rateLimitMiddleware = (
   setInterval(cleanupExpiredEntries, CLEANUP_INTERVAL_MS);
 
   return (req: Request, res: Response, next: NextFunction): void => {
+    if (envConfig.NODE_ENV !== "production") return next();
     const ip = req.ip ?? req.socket.remoteAddress ?? "unknown";
     const now = Date.now();
 
