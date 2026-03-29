@@ -14,6 +14,7 @@ import { sessionMiddleware } from "./config/session";
 import { initializePassport } from "./config/passport";
 
 import bookRouter from "./modules/books/book.router";
+import userRouter from "./modules/users/users.router";
 import authRouter from "./modules/auth/auth.router";
 
 const globalRateLimit = rateLimitMiddleware(rateLimitConfigs.global);
@@ -86,6 +87,7 @@ class App {
     // Auth routes
     this.app.use("/api/auth", authRateLimit, authRouter);
 
+    this.app.use("/api/users", userRouter);
     // Protected routes
     this.app.use("/api/books", bookRouter);
   }

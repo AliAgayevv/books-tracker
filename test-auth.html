@@ -95,6 +95,38 @@
       </div>
     </div>
 
+    <h2>Users — Profile</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Get Profile</h3>
+        <p style="color:#666; font-size:12px; margin:0 0 10px">Returns current user's profile from session.</p>
+        <button class="secondary" onclick="getProfile()">GET /api/users</button>
+      </div>
+      <div class="card">
+        <h3>Update Profile</h3>
+        <p style="color:#666; font-size:12px; margin:0 0 10px">At least one field required.</p>
+        <input id="update-username" placeholder="new username (optional)" />
+        <input id="update-email" placeholder="new email (optional)" />
+        <button onclick="updateProfile()">PUT /api/users</button>
+      </div>
+      <div class="card">
+        <h3>Change Password</h3>
+        <p style="color:#666; font-size:12px; margin:0 0 10px">Only works for non-OAuth accounts.</p>
+        <input id="cp-current" placeholder="current password" type="password" />
+        <input id="cp-new" placeholder="new password" type="password" />
+        <input id="cp-confirm" placeholder="confirm new password" type="password" />
+        <input id="cp-totp" placeholder="2FA code (required if 2FA enabled)" maxlength="6" />
+        <button onclick="changePassword()">PUT /api/users/password</button>
+      </div>
+      <div class="card">
+        <h3>Delete Account</h3>
+        <p style="color:#666; font-size:12px; margin:0 0 10px">Permanently deletes account and destroys session.</p>
+        <input id="del-password" placeholder="current password" type="password" />
+        <input id="del-totp" placeholder="2FA code (required if 2FA enabled)" maxlength="6" />
+        <button class="danger" onclick="deleteAccount()">DELETE /api/users</button>
+      </div>
+    </div>
+
     <h2>OAuth</h2>
     <div class="grid">
       <div class="card">
@@ -199,6 +231,38 @@
         call("POST /2fa/disable", "POST", "/api/auth/2fa/disable", {
           token: document.getElementById("disable-token").value,
         });
+      }
+
+      function getProfile() {
+        call("GET /users", "GET", "/api/users");
+      }
+
+      function updateProfile() {
+        const body = {};
+        const username = document.getElementById("update-username").value;
+        const email = document.getElementById("update-email").value;
+        if (username) body.username = username;
+        if (email) body.email = email;
+        call("PUT /users", "PUT", "/api/users", body);
+      }
+
+      function changePassword() {
+        const body = {
+          currentPassword: document.getElementById("cp-current").value,
+          newPassword: document.getElementById("cp-new").value,
+          confirmNewPassword: document.getElementById("cp-confirm").value,
+        };
+        const totp = document.getElementById("cp-totp").value;
+        if (totp) body.totpToken = totp;
+        call("PUT /users/password", "PUT", "/api/users/password", body);
+      }
+
+      function deleteAccount() {
+        if (!confirm("This will permanently delete your account. Are you sure?")) return;
+        const body = { currentPassword: document.getElementById("del-password").value };
+        const totp = document.getElementById("del-totp").value;
+        if (totp) body.totpToken = totp;
+        call("DELETE /users", "DELETE", "/api/users", body);
       }
     </script>
   </body>
