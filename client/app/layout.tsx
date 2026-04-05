@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { Provider } from "../components/Provider";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const joan = localFont({
+  src: "../public/fonts/Joan-Regular.ttf",
+  variable: "--font-joan",
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
@@ -31,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${joan.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body>
         <Provider>{children}</Provider>
       </body>

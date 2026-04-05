@@ -7,8 +7,8 @@ const system = createSystem(defaultConfig, {
   theme: {
     tokens: {
       fonts: {
-        heading: { value: "var(--font-geist-sans), sans-serif" },
-        body: { value: "var(--font-geist-sans), sans-serif" },
+        heading: { value: "system-ui, sans-serif" },
+        body: { value: "system-ui, sans-serif" },
         mono: { value: "var(--font-geist-mono), monospace" },
       },
     },

@@ -1,2 +1,7 @@
 @import "tailwindcss";
 
+.joan-font {
+  font-family: var(--font-joan), serif;
+  font-weight: 700;
+}
+

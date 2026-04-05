@@ -1,4 +1,5 @@
 import { Flex, Heading, Separator, Stack, Text } from "@chakra-ui/react";
+import { Heart, Check } from "lucide-react";
 import {
   Badge,
   Button,
@@ -46,68 +47,48 @@ export default function ComponentShowcase() {
 
           {/* ── Button ────────────────────────────────────────────────────── */}
           <Section title="Button">
-            {/* Variants */}
-            <Text fontSize="sm" fontWeight="medium">
-              Variants
-            </Text>
-            <Flex gap={3} wrap="wrap">
-              <Button colorPalette="blue">Solid</Button>
-              <Button variant="outline" colorPalette="blue">
-                Outline
-              </Button>
-              <Button variant="ghost" colorPalette="blue">
-                Ghost
-              </Button>
-              <Button variant="subtle" colorPalette="blue">
-                Subtle
-              </Button>
+            {/* Purple */}
+            <Text fontSize="sm" fontWeight="medium">Purple — solid &amp; outline</Text>
+            <Flex gap={3} wrap="wrap" align="center">
+              <Button colorScheme="purple">Button</Button>
+              <Button colorScheme="purple" rightIcon={<Check size={15} />}>Button</Button>
+              <Button colorScheme="purple" leftIcon={<Heart size={15} />}>Button</Button>
+              <Button colorScheme="purple" variant="outline">Button</Button>
+              <Button colorScheme="purple" variant="outline" rightIcon={<Heart size={15} />}>Button</Button>
+              <Button colorScheme="purple" variant="outline" leftIcon={<Heart size={15} />}>Button</Button>
+            </Flex>
+
+            {/* Yellow */}
+            <Text fontSize="sm" fontWeight="medium">Yellow — solid &amp; outline</Text>
+            <Flex gap={3} wrap="wrap" align="center">
+              <Button colorScheme="yellow">Button</Button>
+              <Button colorScheme="yellow" rightIcon={<Check size={15} />}>Button</Button>
+              <Button colorScheme="yellow" leftIcon={<Heart size={15} />}>Button</Button>
+              <Button colorScheme="yellow" variant="outline">Button</Button>
+              <Button colorScheme="yellow" variant="outline" rightIcon={<Heart size={15} />}>Button</Button>
+              <Button colorScheme="yellow" variant="outline" leftIcon={<Heart size={15} />}>Button</Button>
             </Flex>
 
             {/* Sizes */}
-            <Text fontSize="sm" fontWeight="medium">
-              Sizes
-            </Text>
+            <Text fontSize="sm" fontWeight="medium">Sizes</Text>
             <Flex gap={3} align="center" wrap="wrap">
-              <Button size="xs" colorPalette="blue">
-                XSmall
-              </Button>
-              <Button size="sm" colorPalette="blue">
-                Small
-              </Button>
-              <Button size="md" colorPalette="blue">
-                Medium
-              </Button>
-              <Button size="lg" colorPalette="blue">
-                Large
-              </Button>
+              <Button colorScheme="purple" size="sm">Small</Button>
+              <Button colorScheme="purple" size="md">Medium</Button>
+              <Button colorScheme="purple" size="lg">Large</Button>
+              <Button colorScheme="yellow" size="sm">Small</Button>
+              <Button colorScheme="yellow" size="md">Medium</Button>
+              <Button colorScheme="yellow" size="lg">Large</Button>
             </Flex>
 
             {/* States */}
-            <Text fontSize="sm" fontWeight="medium">
-              States
-            </Text>
-            <Flex gap={3} wrap="wrap">
-              <Button colorPalette="blue" isLoading loadingText="Saving...">
-                Loading with text
-              </Button>
-              <Button colorPalette="blue" isLoading>
-                Loading
-              </Button>
-              <Button colorPalette="blue" disabled>
-                Disabled
-              </Button>
-            </Flex>
-
-            {/* Color palettes */}
-            <Text fontSize="sm" fontWeight="medium">
-              Color palettes
-            </Text>
-            <Flex gap={3} wrap="wrap">
-              <Button colorPalette="blue">Blue</Button>
-              <Button colorPalette="green">Green</Button>
-              <Button colorPalette="red">Red</Button>
-              <Button colorPalette="orange">Orange</Button>
-              <Button colorPalette="gray">Gray</Button>
+            <Text fontSize="sm" fontWeight="medium">States</Text>
+            <Flex gap={3} wrap="wrap" align="center">
+              <Button colorScheme="purple" isLoading loadingText="Saving...">Loading</Button>
+              <Button colorScheme="purple" isLoading>Loading</Button>
+              <Button colorScheme="purple" disabled>Disabled</Button>
+              <Button colorScheme="purple" variant="outline" disabled>Disabled</Button>
+              <Button colorScheme="yellow" isLoading loadingText="Saving...">Loading</Button>
+              <Button colorScheme="yellow" disabled>Disabled</Button>
             </Flex>
           </Section>
 
@@ -216,7 +197,7 @@ export default function ComponentShowcase() {
                   title="No books yet"
                   description="Start by searching for a book."
                   action={
-                    <Button size="sm" colorPalette="blue">
+                    <Button size="sm" colorScheme="purple">
                       Search
                     </Button>
                   }
