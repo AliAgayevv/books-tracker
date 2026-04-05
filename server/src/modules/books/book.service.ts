@@ -1,9 +1,9 @@
 import { ErrorCode, HttpStatus } from "@books-tracker/shared";
 import { AppError } from "../../middleware/errorHandler";
 import { bookRepository } from "./book.repository";
-import { Book, BookRow, CreateBookDto } from "./book.types";
+import { searchBooks, getEditionForCache } from "./book.openLibrary";
+import type { Book, BookRow, BookSearchResult } from "./book.types";
 
-// snake_case → camelCase
 const toBook = (row: BookRow): Book => ({
   id: row.id,
   olWorkId: row.ol_work_id,
@@ -27,9 +27,24 @@ export const bookService = {
     return toBook(row);
   },
 
-  async findOrCreate(dto: CreateBookDto): Promise<Book> {
-    const existing = await bookRepository.findByEditionId(dto.olEditionId);
-    if (existing) return toBook(existing);
+  async search(query: string, type: "title" | "author" | "isbn"): Promise<BookSearchResult[]> {
+    return searchBooks(query, type);
+  },
+
+  // Called by the userBooks module when a user adds a book to their shelf.
+  // Checks the local cache first; fetches from OpenLibrary and persists only on a miss.
+  async findOrCreate(olEditionId: string): Promise<Book> {
+    const cached = await bookRepository.findByEditionId(olEditionId);
+    if (cached) return toBook(cached);
+
+    const dto = await getEditionForCache(olEditionId);
+    if (!dto.olWorkId) {
+      throw new AppError(
+        "Could not resolve book from OpenLibrary",
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        ErrorCode.INVALID_INPUT,
+      );
+    }
 
     const row = await bookRepository.create(dto);
     return toBook(row);
