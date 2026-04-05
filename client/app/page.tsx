@@ -113,36 +113,21 @@ export default function ComponentShowcase() {
 
           {/* ── Input ─────────────────────────────────────────────────────── */}
           <Section title="Input">
+            <Text fontSize="sm" fontWeight="medium">
+              States
+            </Text>
             <Flex gap={6} wrap="wrap">
               <Stack gap={4} flex={1} minW="260px">
-                <Text fontSize="sm" fontWeight="medium">
-                  States
-                </Text>
-                <Input id="basic" label="Basic input" placeholder="Search books..." />
+                <Input placeholder="Default" supportText="Support text" />
                 <Input
-                  id="helper"
-                  label="With helper text"
-                  placeholder="Enter ISBN"
-                  helperText="10 or 13 digit ISBN"
+                  placeholder="Error state"
+                  supportText="Password is incorrect"
+                  state="error"
                 />
-                <Input
-                  id="error"
-                  label="With error"
-                  placeholder="Enter username"
-                  defaultValue="ab"
-                  error="Username must be at least 3 characters"
-                />
-                <Input id="disabled" label="Disabled" placeholder="Not editable" disabled />
               </Stack>
-
               <Stack gap={4} flex={1} minW="260px">
-                <Text fontSize="sm" fontWeight="medium">
-                  Sizes
-                </Text>
-                <Input id="xs" label="XSmall" placeholder="xs input" size="xs" />
-                <Input id="sm" label="Small" placeholder="sm input" size="sm" />
-                <Input id="md" label="Medium" placeholder="md input" size="md" />
-                <Input id="lg" label="Large" placeholder="lg input" size="lg" />
+                <Input placeholder="Success state" supportText="Looks good!" state="success" />
+                <Input placeholder="Disabled" supportText="Support text" disabled />
               </Stack>
             </Flex>
           </Section>
@@ -153,19 +138,19 @@ export default function ComponentShowcase() {
               <Card size="sm" flex={1} minW="180px">
                 <Text fontWeight="medium">Small card</Text>
                 <Text fontSize="sm" color="fg.muted">
-                  size="sm"
+                  Size = sm
                 </Text>
               </Card>
               <Card size="md" flex={1} minW="180px">
                 <Text fontWeight="medium">Medium card</Text>
                 <Text fontSize="sm" color="fg.muted">
-                  size="md" (default)
+                  default (md)
                 </Text>
               </Card>
               <Card size="lg" flex={1} minW="180px">
                 <Text fontWeight="medium">Large card</Text>
                 <Text fontSize="sm" color="fg.muted">
-                  size="lg"
+                  Size = lg
                 </Text>
               </Card>
             </Flex>
