@@ -13,10 +13,11 @@ export const bookController = {
     }
   },
 
-  async create(req: Request, res: Response, next: NextFunction) {
+  async search(req: Request, res: Response, next: NextFunction) {
     try {
-      const book = await bookService.findOrCreate(req.body);
-      ResponseHandler.success(res, book, "Book created", HttpStatus.CREATED);
+      const { q, type } = req.query as { q: string; type: "title" | "author" | "isbn" };
+      const results = await bookService.search(q, type);
+      ResponseHandler.success(res, results, "Search results", HttpStatus.OK);
     } catch (err) {
       next(err);
     }
