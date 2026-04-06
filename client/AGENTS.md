@@ -17,6 +17,20 @@ Before any Next.js work, find and read the relevant doc in `node_modules/next/di
 - `lucide-react` for all icons
 - `next-themes` for dark/light mode
 
+## API Proxy
+`next.config.ts` rewrites `/api/:path*` → `http://localhost:3000/api/:path*`.
+All fetch calls use `/api/...` — never hardcode the Express port.
+
+## "use client" Rules
+- Pages (`app/**/page.tsx`) are **Server Components** — no `"use client"`
+- Only leaf components that need hooks/browser APIs get `"use client"`
+- Interactive sections live in `sections/` — they are the client boundary
+- `components/common/` components are server-safe unless they contain hooks
+
+## Provider Setup
+`ThemeProvider` (next-themes) wraps `ChakraProvider` — **not inside it**.
+This order is required to avoid hydration mismatches between next-themes script injection and Chakra/Emotion style injection.
+
 ---
 
 ## Typography
@@ -98,18 +112,40 @@ Password input component — always has **Lock icon** (left) and **Eye/EyeOff to
 ```
 client/
 ├── app/
-│   ├── layout.tsx        ← Joan font loaded here via next/font/local
-│   ├── globals.css       ← .joan-font class, Tailwind import
-│   └── page.tsx          ← Component showcase (dev reference)
+│   ├── layout.tsx              ← Joan font, AuthProvider + Provider wrappers
+│   ├── globals.css             ← .joan-font class, Tailwind import
+│   ├── page.tsx                ← Component showcase (dev reference)
+│   ├── (auth)/
+│   │   ├── layout.tsx          ← Centered card layout (server component)
+│   │   ├── login/page.tsx      ← Server component
+│   │   ├── register/page.tsx   ← Server component
+│   │   └── 2fa/page.tsx        ← Server component
+│   └── search/
+│       └── page.tsx            ← Server component
+├── sections/                   ← "use client" interactive sections, one per page feature
+│   ├── LoginSection.tsx
+│   ├── RegisterSection.tsx
+│   ├── TwoFactorSection.tsx    ← Digit-by-digit OTP input with paste support
+│   └── SearchSection.tsx
+├── context/
+│   └── AuthContext.tsx         ← "use client", User state + useAuth hook, fetches /me on mount
+├── lib/
+│   └── api/
+│       ├── auth.ts             ← register, login, logout, getMe, verifyTwoFactor
+│       └── books.ts            ← searchBooks (re-exports BookSearchResult from shared)
+├── types/
+│   └── index.ts                ← Re-exports User + BookSearchResult from @books-tracker/shared
 ├── components/
-│   ├── Provider.tsx      ← ChakraProvider + ThemeProvider, system-ui fonts
+│   ├── Provider.tsx            ← ThemeProvider wraps ChakraProvider (order matters!)
 │   └── common/
-│       ├── index.ts      ← Re-exports all components
-│       ├── Button.tsx    ← Custom button (purple/yellow, solid/outline)
-│       ├── Input.tsx     ← Password input with animated eye toggle
+│       ├── index.ts            ← Re-exports all components
+│       ├── Button.tsx          ← Custom button (purple/yellow, solid/outline)
+│       ├── Input.tsx           ← Password input with animated eye toggle
+│       ├── SearchBar.tsx       ← Search input with type selector (title/author/isbn)
 │       ├── Card.tsx
 │       ├── Badge.tsx
-│       ├── Navbar.tsx
+│       ├── Navbar.tsx          ← Server component, uses ThemeToggle as client leaf
+│       ├── ThemeToggle.tsx     ← "use client", uses useTheme from next-themes
 │       ├── PageWrapper.tsx
 │       ├── Spinner.tsx
 │       └── EmptyState.tsx
@@ -117,3 +153,11 @@ client/
     └── fonts/
         └── Joan-Regular.ttf
 ```
+
+## Auth Flow
+- Login → if `twoFactorRequired: true` → redirect to `/2fa` → verify → home
+- Google OAuth → link to `/api/auth/google` (backend handles redirect)
+- `AuthContext` fetches `GET /api/auth/me` on mount to restore session
+
+## SearchBar
+`Input.tsx` is password-only (Lock icon, Eye toggle). For non-password text inputs, build inline styled inputs matching the design tokens, as done in `SearchBar.tsx` and the auth sections.

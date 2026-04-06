@@ -1,8 +1,8 @@
-import { ErrorCode, HttpStatus } from "@books-tracker/shared";
+import { ErrorCode, HttpStatus, type BookSearchResult } from "@books-tracker/shared";
 import { AppError } from "../../middleware/errorHandler";
 import { bookRepository } from "./book.repository";
 import { searchBooks, getEditionForCache } from "./book.openLibrary";
-import type { Book, BookRow, BookSearchResult } from "./book.types";
+import type { Book, BookRow } from "./book.types";
 
 const toBook = (row: BookRow): Book => ({
   id: row.id,

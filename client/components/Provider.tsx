@@ -17,10 +17,8 @@ const system = createSystem(defaultConfig, {
 
 export function Provider({ children }: { children: React.ReactNode }) {
   return (
-    <ChakraProvider value={system}>
-      <ThemeProvider attribute="class" disableTransitionOnChange>
-        {children}
-      </ThemeProvider>
-    </ChakraProvider>
+    <ThemeProvider attribute="class" disableTransitionOnChange>
+      <ChakraProvider value={system}>{children}</ChakraProvider>
+    </ThemeProvider>
   );
 }

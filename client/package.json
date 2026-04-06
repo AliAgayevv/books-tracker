@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@books-tracker/shared": "*",
     "@chakra-ui/react": "^3.34.0",
     "lucide-react": "^1.7.0",
     "next": "16.2.2",

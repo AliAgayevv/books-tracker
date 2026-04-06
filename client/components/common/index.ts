@@ -6,3 +6,4 @@ export { Navbar } from "./Navbar";
 export { PageWrapper } from "./PageWrapper";
 export { Spinner } from "./Spinner";
 export { EmptyState } from "./EmptyState";
+export { SearchBar } from "./SearchBar";

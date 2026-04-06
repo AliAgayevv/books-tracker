@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import { Provider } from "../components/Provider";
+import { AuthProvider } from "../context/AuthContext";
 import "./globals.css";
 
 const joan = localFont({
@@ -35,7 +36,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${joan.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body>
-        <Provider>{children}</Provider>
+        <Provider>
+          <AuthProvider>{children}</AuthProvider>
+        </Provider>
       </body>
     </html>
   );

@@ -27,18 +27,6 @@ export interface OLAuthorRaw {
   name?: string;
 }
 
-// Clean DTO useful for client
-export interface BookSearchResult {
-  olWorkId: string;
-  olEditionId: string;
-  title: string;
-  author: string | null;
-  publishedYear: number | null;
-  isbn: string | null;
-  coverUrl: string | null;
-  language: string | null;
-}
-
 export interface BookRow {
   id: number;
   ol_work_id: string;

@@ -1,33 +1,7 @@
-"use client";
-
-import { Box, Flex, HStack, Text, IconButton } from "@chakra-ui/react";
-import { useTheme } from "next-themes";
+import { Box, Flex, HStack, Text } from "@chakra-ui/react";
 import Link from "next/link";
-
-interface NavItem {
-  label: string;
-  href: string;
-}
-
-interface NavbarProps {
-  brand?: string;
-  items?: NavItem[];
-}
-
-function ThemeToggle() {
-  const { resolvedTheme, setTheme } = useTheme();
-
-  return (
-    <IconButton
-      aria-label="Toggle color mode"
-      variant="ghost"
-      size="sm"
-      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-    >
-      {resolvedTheme === "dark" ? "☀️" : "🌙"}
-    </IconButton>
-  );
-}
+import { NavbarProps } from "@/types/navbar";
+import ThemeToggle from "./ThemeToggle";
 
 export function Navbar({ brand = "Books Tracker", items = [] }: NavbarProps) {
   return (

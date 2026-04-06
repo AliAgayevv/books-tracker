@@ -1,8 +1,8 @@
 import { logger } from "../../config/logger";
 import { AppError } from "../../middleware/errorHandler";
 import { ErrorCode, HttpStatus } from "@books-tracker/shared";
-import type { OLSearchRaw, OLEditionRaw, OLAuthorRaw, BookSearchResult } from "./book.types";
-import type { CreateBookDto } from "./book.types";
+import type { BookSearchResult } from "@books-tracker/shared";
+import type { OLSearchRaw, OLEditionRaw, OLAuthorRaw, CreateBookDto } from "./book.types";
 
 const OL_BASE = "https://openlibrary.org";
 const OL_COVERS = "https://covers.openlibrary.org/b/id";
