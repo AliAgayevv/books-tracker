@@ -14,7 +14,7 @@ export interface UserBookEntry {
   bookId: number;
   review: string | null;
   status: BookStatus;
-  rating: 1 | 2 | 3 | 4 | 5 | null;
+  rating: number | null;
   startedAt: string | null;
   finishedAt: string | null;
   addedToLibraryAt: string;

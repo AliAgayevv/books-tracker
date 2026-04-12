@@ -9,7 +9,7 @@ function toUserBookEntry(row: UserBookWithBookRow): UserBookEntry {
     id: row.id,
     bookId: row.book_id,
     status: row.status,
-    rating: row.rating as 1 | 2 | 3 | 4 | 5 | null,
+    rating: row.rating ? Number(row.rating) : null,
     review: row.review,
     startedAt: row.started_at ? row.started_at.toISOString() : null,
     finishedAt: row.finished_at ? row.finished_at.toISOString() : null,

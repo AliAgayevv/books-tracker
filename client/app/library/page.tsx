@@ -1,8 +1,10 @@
 import { Heading, Stack, Text } from "@chakra-ui/react";
 import { Navbar, PageWrapper } from "../../components/common";
-import SearchSection from "../../sections/SearchSection";
+import LibrarySection from "../../sections/LibrarySection";
 
-export default function SearchPage() {
+export const metadata = { title: "My Library" };
+
+export default function LibraryPage() {
   return (
     <>
       <Navbar
@@ -17,12 +19,12 @@ export default function SearchPage() {
         <Stack gap={8}>
           <Stack gap={1}>
             <Heading as="h1" size="xl">
-              Search Books
+              My Library
             </Heading>
-            <Text color="fg.muted">Find books by title, author, or ISBN.</Text>
+            <Text color="fg.muted">All the books you are tracking.</Text>
           </Stack>
 
-          <SearchSection />
+          <LibrarySection />
         </Stack>
       </PageWrapper>
     </>

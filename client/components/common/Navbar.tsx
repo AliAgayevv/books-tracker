@@ -2,6 +2,7 @@ import { Box, Flex, HStack, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { NavbarProps } from "@/types/navbar";
 import ThemeToggle from "./ThemeToggle";
+import { NavbarAuth } from "./NavbarAuth";
 
 export function Navbar({ brand = "Books Tracker", items = [] }: NavbarProps) {
   return (
@@ -32,6 +33,7 @@ export function Navbar({ brand = "Books Tracker", items = [] }: NavbarProps) {
             </Link>
           ))}
           <ThemeToggle />
+          <NavbarAuth />
         </HStack>
       </Flex>
     </Box>

@@ -133,7 +133,7 @@ export default function LoginSection() {
 
         {/* Google OAuth */}
         <a href="/api/auth/google" style={{ textDecoration: "none" }}>
-          <Button type="button" colorScheme="purple[" variant="outline" fullWidth>
+          <Button type="button" colorScheme="purple" variant="outline" fullWidth>
             Continue with Google
           </Button>
         </a>
