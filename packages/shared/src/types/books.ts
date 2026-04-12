@@ -8,3 +8,22 @@ export interface BookSearchResult {
   coverUrl: string | null;
   language: string | null;
 }
+
+export interface UserBookEntry {
+  id: number;
+  bookId: number;
+  review: string | null;
+  status: BookStatus;
+  rating: 1 | 2 | 3 | 4 | 5 | null;
+  startedAt: string | null;
+  finishedAt: string | null;
+  addedToLibraryAt: string;
+  updatedAt: string;
+  book: BookSearchResult;
+}
+
+export enum BookStatus {
+  WANT_TO_READ = "want_to_read",
+  CURRENTLY_READING = "currently_reading",
+  READ = "read",
+}

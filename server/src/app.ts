@@ -16,6 +16,7 @@ import { initializePassport } from "./config/passport";
 import bookRouter from "./modules/books/book.router";
 import userRouter from "./modules/users/users.router";
 import authRouter from "./modules/auth/auth.router";
+import userBooksRouter from "./modules/userBooks/userBooks.router";
 
 const globalRateLimit = rateLimitMiddleware(rateLimitConfigs.global);
 const authRateLimit = rateLimitMiddleware(rateLimitConfigs.auth);
@@ -88,8 +89,8 @@ class App {
     this.app.use("/api/auth", authRateLimit, authRouter);
 
     this.app.use("/api/users", userRouter);
-    // Protected routes
     this.app.use("/api/books", bookRouter);
+    this.app.use("/api/user-books", userBooksRouter);
   }
 
   private initializeErrorHandling(): void {

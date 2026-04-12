@@ -36,11 +36,3 @@ CREATE TABLE user_books(
     UNIQUE (user_id, book_id)
 );
 
-CREATE TABLE book_notes(
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    book_id INTEGER REFERENCES books(id) ON DELETE CASCADE,
-    context TEXT NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
